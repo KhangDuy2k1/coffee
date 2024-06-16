@@ -11,6 +11,7 @@ async function main() {
   app.useGlobalPipes(new ValidationPipe(
     { forbidNonWhitelisted: true, whitelist: true }
   ));
+  app.enableCors();
   await app.listen(port);
 }
 main();

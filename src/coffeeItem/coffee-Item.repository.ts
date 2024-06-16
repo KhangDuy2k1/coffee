@@ -16,7 +16,6 @@ export class CoffeeItemRepository implements Repository<ICoffeeItem> {
         const newCoffee = new this.coffeeItemModel(data);
         await newCoffee.save()
     } catch (error) {
-        console.log(error)
         throw new ServerErrorException(Message.SERVER_ERROR_MESSAGE);
     }
     }
@@ -48,4 +47,15 @@ export class CoffeeItemRepository implements Repository<ICoffeeItem> {
             throw new ServerErrorException(Message.SERVER_ERROR_MESSAGE);
         }
     };
+    async getCoffeePage(query: any): Promise<any[]> {
+        const {page, numberPage} = query;
+        const skip = (page - 1)*numberPage
+        try {
+            return await this.coffeeItemModel.find()
+            .skip(skip)
+            .limit(numberPage)
+        } catch (error) {
+            throw new ServerErrorException(Message.SERVER_ERROR_MESSAGE);
+        }
+    }
 }

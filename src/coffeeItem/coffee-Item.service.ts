@@ -8,4 +8,7 @@ export class CoffeeItemService extends BaseService<ICoffeeItem,CoffeeItemReposit
     constructor(private coffeeItemRepository: CoffeeItemRepository){
         super(coffeeItemRepository)
     }
+    async getCoffeePage(query: any): Promise<any[]> {
+        return this.coffeeItemRepository.getCoffeePage(query);
+    }
 }

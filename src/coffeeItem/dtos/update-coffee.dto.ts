@@ -14,7 +14,7 @@ export class UpdateCoffeeDto {
     image: string
     @IsString()
     desc: string
-    @IsNotEmpty({message: "category_id isn't empty"})
-    @IsMongoId()
-    category: Id
+    // @IsNotEmpty({message: "category_id isn't empty"})
+    // @IsMongoId()
+    // category: Id
 }

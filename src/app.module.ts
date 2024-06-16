@@ -11,6 +11,7 @@ import { OrderModule } from "./order/order.module";
 import { Endpoint } from "./common/constants/endpoint.constant";
 import { ReviewModule } from "./review/review.module";
 import { WalletModule } from "./wallet/wallet.module";
+import { AddressModule } from "./address/address.module";
 env.config();
 @Module({
   imports: [
@@ -34,7 +35,8 @@ env.config();
     CoffeeItemModule,
     OrderModule,
     ReviewModule,
-    WalletModule
+    WalletModule,
+    AddressModule
   ],
   providers: [JwtHelper, JwtService]
 })
@@ -42,7 +44,9 @@ export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(AuthMiddlewate, VerifyAdminMiddlewate)
       .forRoutes(
-        `/user/${Endpoint.ALL_USER}`
+        `/user/${Endpoint.ALL_USER}`,
+        `/user/${Endpoint.BLOCK}`,
+        `/order/${Endpoint.GET_ALL_ORDER}`
       )
     consumer.apply(AuthMiddlewate)
       .forRoutes(
@@ -56,7 +60,10 @@ export class AppModule implements NestModule{
       `review/${Endpoint.REVIEW_COFFEE}`,
       `wallet/${Endpoint.CREATE_WALLET}`,
       `wallet/${Endpoint.TOP_UP_TO_WALLET}`,
-      `coffee-item/${Endpoint.GET_ALL_COFFEE}`
+      `wallet/${Endpoint.GET_WALLET_USER_LOGIN}`,
+      `coffee-item/${Endpoint.GET_ALL_COFFEE}`,
+      `address/${Endpoint.GET_ALL_ADDRESS_ORDER}`,
+      `address/${Endpoint.ADD_ADDRESS_ORDER}`
       )
   }
 }

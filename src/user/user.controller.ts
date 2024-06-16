@@ -10,9 +10,10 @@ import {
   Delete,
   Patch,
   Put,
-  HttpStatus
+  HttpStatus,
+  Query
 } from "@nestjs/common";
-import { Response, Request } from "express";
+import { Response, Request, query } from "express";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dtos/create-user.dto";
 import { IRegisterResponse } from "./interface/responses/register.interface";
@@ -74,15 +75,41 @@ export class UserController {
     res.json(loginResponse);
   }
 
+  @Patch(Endpoint.BLOCK)
+  @HttpCode(HttpStatus.OK)
+  async block(@Param("id_user") id_user: any, @Res() res: Response) { 
+      await this.userService.block(id_user)
+      const response = {
+        success: true,
+        mes: "đã chặn người dùng thành công",
+      }
+      res.json(response);
+  }
+
+  @Patch(Endpoint.UN_BLOCK)
+  @HttpCode(HttpStatus.OK)
+  async unBlock(@Param("id_user") id_user: any, @Res() res: Response) { 
+      await this.userService.removeBlock(id_user)
+      const response = {
+        success: true,
+        mes: "đã bỏ chặn người dùng thành công",
+      }
+      res.json(response);
+  }
+
   @Get(Endpoint.ALL_USER)
   @HttpCode(HttpStatus.OK)
-  async getAllUser(@Req() req: Request, @Res() res: Response): Promise<void> { 
-    const resGetAllUser: IGetAllUser = {
-      success: true,
-      mes: "Get all users successfully",
-      allUser: await this.userService.findAll()
-    }
-    res.json(resGetAllUser)
+  async getAllUser(@Req() req: Request, @Res() res: Response, @Query() query: {page: any, numberPage: any}): Promise<void> { 
+      const resGetAllUser: IGetAllUser = {
+        success: true,
+        mes: "Get all users successfully",
+        allUser: query ? await this.userService.getUserPage(query) : 
+        await this.userService.findAll(),
+        totalUsers: await this.userService.gettotalUsers(),
+        totalUsersBlocked: await this.userService.gettotalUsers(true),
+        totalUsersActive: await this.userService.gettotalUsers(false)
+      }
+      res.json(resGetAllUser);
   }
 
   @Get(Endpoint.FIND_USER_LOGIN)
@@ -95,6 +122,7 @@ export class UserController {
     }
     res.json(resGetUserLogin)
   }
+
 
   @Delete(Endpoint.DELETE_USER)
   @HttpCode(HttpStatus.OK)
@@ -132,9 +160,7 @@ export class UserController {
   @Patch(Endpoint.LIKE_COFFEE)
   @HttpCode(HttpStatus.CREATED)
   async likeCoffee(@Req() req: Request, @Param("id") id: Id, @Res() res: Response): Promise<void> {
-    console.log("hello");
       const id_user: Id = req["user"]["_id"];
-      console.log(id_user);
       await this.userService.likeCoffee(id, id_user);
       const likeCoffeeResponse: ILikeCoffee = { 
         success: true,

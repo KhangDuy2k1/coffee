@@ -1,3 +1,3 @@
-export enum PasswordConstant {
+export enum BcryptConstant {
     BCRYPT_ROUND = 10
 }

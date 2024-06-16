@@ -49,7 +49,6 @@ export class CategoryController {
     @Put(Endpoint.UPDATE_CATEGORY)
     @HttpCode(HttpStatus.OK)
     async updateCategory(@Param("id") id: Id, @Body() dataCategory: DataCategoryDto, @Res() res: Response): Promise<any> { 
-        console.log("hello")
         await this.categoryService.update(id, dataCategory)
         const responseUpdate: IUpdateCategory = {
             success: true,

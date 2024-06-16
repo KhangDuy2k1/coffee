@@ -15,7 +15,7 @@ export class CoffeeItem extends Document{
     image: string;
     @Prop()
     desc: string;
-    @Prop({type: Types.ObjectId, ref: Category.name})
-    category: Types.ObjectId
+    // @Prop({type: Types.ObjectId, ref: Category.name})
+    // category: Types.ObjectId
 }
 export const CoffeeItemSchema = SchemaFactory.createForClass(CoffeeItem);

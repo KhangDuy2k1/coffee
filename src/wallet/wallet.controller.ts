@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Put, Res, Req } from "@nestjs/common";
+import {Get, Body, Controller, HttpCode, HttpStatus, Post, Put, Res, Req } from "@nestjs/common";
 import { Request, Response } from "express";
 import { Endpoint } from "src/common/constants/endpoint.constant";
 import { CreateWalletDto } from "./dtos/create-wallet.dto";
@@ -23,11 +23,23 @@ export class WalletControler {
         res.json(createWallet);
     }
 
+    @Get(Endpoint.GET_WALLET_USER_LOGIN)
+    @HttpCode(HttpStatus.OK)
+    async getWallet(@Req() req: Request, @Res() res: Response){
+        const id_user = req["user"]["_id"];
+        const wallet = await this.walletService.getWallet(id_user);
+        res.json({ 
+            success: true,
+            mes: "lấy ví thành công",
+            wallet: wallet
+        })
+    }
+
     @Put(Endpoint.TOP_UP_TO_WALLET)
     @HttpCode(HttpStatus.OK)
-    async topUp(@Req() req: Request, @Res() res: Response, @Body("amountWantToAdd") amountWantToAdd: number ): Promise<any> { 
+    async topUp(@Req() req: Request, @Res() res: Response, @Body("amountWantToAdd") amountWantToAdd: string ): Promise<any> { 
         const {_id} = req["user"];
-        await this.walletService.topUp( _id, amountWantToAdd)
+        await this.walletService.topUp( _id, parseInt(amountWantToAdd))
         const response: ITopUp = {
             success: true,
             mes: "add money successfully"

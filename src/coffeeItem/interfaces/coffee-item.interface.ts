@@ -6,5 +6,5 @@ export interface ICoffeeItem extends Document {
     stars: number
     image: string;
     desc: string;
-    category: Types.ObjectId
+    // category: Types.ObjectId
 }

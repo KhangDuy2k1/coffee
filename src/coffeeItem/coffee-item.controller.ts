@@ -1,4 +1,4 @@
-import { Req, Res, Body, Controller, HttpCode, HttpStatus,Get, Post, Delete, Param,Put , Type } from "@nestjs/common";
+import { Req, Res, Body, Controller, HttpCode, HttpStatus,Get, Post, Delete, Param,Put , Type, Query } from "@nestjs/common";
 import { Types } from "mongoose";
 import { Response } from "express";
 import { CreateCoffeeDto } from "./dtos/create-coffee.dto";
@@ -26,13 +26,13 @@ export class CoffeeitemController {
         res.json(addCoffeeResponse);
     }
 
-    @Get(Endpoint.GET_ALL_COFFEE)
+    @Get(Endpoint.GET_ALL_COFFEE) 
     @HttpCode(HttpStatus.OK)
-    async getAllCoffee(@Res() res: Response): Promise<void> { 
+    async getAllCoffee(@Query() query: any,@Res() res: Response): Promise<void> { 
         const allCoffeeResponse: IGetAllCoffee = { 
             success: true,
             mes: "get all coffee successfully",
-            allCoffee: await this.coffeeItemService.findAll()
+            allCoffee: !query ? await this.coffeeItemService.findAll() : await this.coffeeItemService.getCoffeePage(query)
         }
         res.json(allCoffeeResponse);
     }

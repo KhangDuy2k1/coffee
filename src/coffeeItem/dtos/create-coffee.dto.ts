@@ -14,7 +14,4 @@ export class CreateCoffeeDto {
     image: string
     @IsString()
     desc: string
-    @IsNotEmpty({message: "category_id isn't empty"})
-    @IsMongoId()
-    category: Id
 }

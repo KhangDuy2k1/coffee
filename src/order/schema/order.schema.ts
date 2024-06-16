@@ -1,6 +1,8 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
 import { Types, Document } from "mongoose";
+import { Address } from "src/address/schema/address.schema";
 import { CoffeeItem } from "src/coffeeItem/schema/coffee-Item.schema";
+import { Status } from "src/common/constants/status.constant";
 import { UserConstant } from "src/common/constants/user.constant";
 import { User } from "src/user/schema/user.schema";
 type Id = Types.ObjectId;
@@ -12,8 +14,10 @@ export class Order extends Document {
     user_id: Id
     @Prop({type: Types.ObjectId, ref: CoffeeItem.name})
     coffeeItem_id: Id
-    @Prop({default: UserConstant.STATUS_ORDER_DEFAULT})
+    @Prop({default: Status.ORDERED})
     status: string
+    @Prop({type: Types.ObjectId, ref: Address.name})
+    id_address: Id
     @Prop()
     total: number;
 }

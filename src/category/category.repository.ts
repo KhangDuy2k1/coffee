@@ -30,7 +30,6 @@ export class CategoryRepository implements Repository<ICategory>  {
         async create(data: CreateCategoryDto): Promise<void> {
           try {
             const newCategory = new this.categoryModel(data)
-            console.log(newCategory);
             await newCategory.save()
           } catch (error) {
              throw new ServerErrorException(Message.SERVER_ERROR_MESSAGE);

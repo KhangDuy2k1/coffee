@@ -13,16 +13,12 @@ type Id = Types.ObjectId;
 @Injectable()
 export class UserRepository implements Repository<IUser>{
      constructor(@InjectModel(User.name) private userModel: Model<User>, private coffeeRepository: CoffeeItemRepository){}
-       async findOne(id: Id):Promise<IUser> {
-           return 
-        }
        async findById(id: Id): Promise<IUser> {
         try {
             return await this.userModel.findById(id);
         } catch (error) {
             throw new ServerErrorException(Message.SERVER_ERROR_MESSAGE);
         }
-           
        } 
        
        async findEmailOrPhonenumber(dataUser: UpdateUserDto): Promise<any> {
@@ -81,7 +77,7 @@ export class UserRepository implements Repository<IUser>{
                 throw new ServerErrorException(Message.SERVER_ERROR_MESSAGE);
             }
        }
-
+       
        async getCoffeeLiked(coffeesLiked: Id[]): Promise<ICoffeeItem[]> { 
             try {
              return await Promise.all(coffeesLiked.map((coffeeId)  => { 
@@ -91,6 +87,39 @@ export class UserRepository implements Repository<IUser>{
                 throw new ServerErrorException(Message.SERVER_ERROR_MESSAGE);
             }
        }
+       async getCoffeePage(query: any){
+        const {page, numberPage} = query;
+            const skip = (page - 1)*numberPage
+            try {
+                return await this.userModel.find()
+                .skip(skip)
+                .limit(numberPage)
+            } catch (error) {
+                throw new ServerErrorException(Message.SERVER_ERROR_MESSAGE);
+            }
+       }
 
+       async getTotalUsers(block?: boolean ) { 
+            try {
+                if(block) return await this.userModel.countDocuments({block: block});
+                return await this.userModel.countDocuments();
+            } catch (error) {
+                throw new ServerErrorException(Message.SERVER_ERROR_MESSAGE);
+            }
+       }
 
+       async block(id: any) { 
+            try {
+                await this.userModel.updateOne({_id: id}, {block: true})
+            } catch (error) {
+                throw new ServerErrorException(Message.SERVER_ERROR_MESSAGE);
+            }
+       }
+       async removeBlock(id: any) { 
+            try {
+                await this.userModel.updateOne({_id: id}, {block: false})
+            } catch (error) {
+                throw new ServerErrorException(Message.SERVER_ERROR_MESSAGE);
+            }
+       }
 }

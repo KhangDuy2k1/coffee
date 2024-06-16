@@ -12,6 +12,8 @@ export class User extends Document {
     phonenumber: string;
     @Prop({default: UserConstant.ROLE_USER_DEFAULT})
     role: string;
+    @Prop({default: false})
+    block: boolean;
     @Prop({type: [{type: Types.ObjectId, ref: "CoffeeItem"}]})
     likedCoffeeItem: Types.ObjectId[]
     @Prop({default: UserConstant.AVATAR_USER})

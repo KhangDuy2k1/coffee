@@ -15,6 +15,14 @@ export class WalletService extends BaseService<IWallet, WalletRepository>{
             return !!wallet
         }
 
+        async getWallet(id_user: Id): Promise<any> { 
+            const res: any = await this.walletRepository.findWallet(id_user);
+            if(!res){ 
+                throw new NotFoundException("chưa tạo ví")
+            }
+            return res
+        } 
+
         async createWallet(id_user: Id): Promise<void> {
             const check: boolean = await this.checkWalletExist(id_user);
             if(check) throw new ConfictException("Wallet arealdy exist");
@@ -25,7 +33,6 @@ export class WalletService extends BaseService<IWallet, WalletRepository>{
             const check: boolean = await this.checkWalletExist(id_user);
             if(!check) throw new NotFoundException("wallet not found");
             const amountMoneyUser: number = await this.getAmountMoney(id_user);
-            console.log(amountMoneyUser);
             const newAmountMoney: number = this.amountAfterAdding(amountMoneyUser , amountWantToAdd);
             await this.updateAmountMoney(newAmountMoney, id_user);
         }

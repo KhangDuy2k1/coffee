@@ -2,7 +2,7 @@ import { HttpException, HttpStatus } from "@nestjs/common";
 
 class BaseException extends HttpException {
     constructor(err: string, status: number){
-        super({success: false ,status: status, error: err}, status);
+        super({success: false ,status: status, message: err}, status);
     }
 }
 export class ForbidenException extends BaseException {

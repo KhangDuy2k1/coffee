@@ -1,8 +1,8 @@
 import {
     IsEmail,
     IsMobilePhone,
-    IsNotEmpty
-} from "class-validator"
+    IsNotEmpty,
+} from "class-validator";
 export class CreateUserDto { 
      @IsEmail()
      @IsNotEmpty()
